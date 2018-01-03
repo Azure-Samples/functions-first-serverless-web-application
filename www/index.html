@@ -201,7 +201,6 @@
         }
         
         function getUsername() {
-          var functionsUrl = window.apiBaseUrl + "/api/GetUploadUrl";
           superagent.get(window.apiBaseUrl + "/.auth/me")
             .set("X-ZUMO-AUTH", authToken)
             .end(function(err, res) {
