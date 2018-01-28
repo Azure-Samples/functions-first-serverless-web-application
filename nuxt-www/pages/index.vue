@@ -16,6 +16,7 @@ import AppNavigation from '~/components/AppNavigation.vue'
 import AppMasthead from '~/components/AppMasthead.vue'
 import AppPhotogrid from '~/components/AppPhotogrid.vue'
 import AppLoader from '~/components/AppLoader.vue'
+import staticImages from '~/app/staticImages'
 
 export default {
   data() {
@@ -47,26 +48,14 @@ export default {
     AppLoader
   },
   mounted() {
-      if (this.backendEnabled) {
-        setTimeout(function() {
-          this.initialized = true
-        }.bind(this), 3000)
-      } else {
-        // blanks
-        this.images = Array(10).fill().map((_, i) => {
-          return {
-            id: i + 1,
-            imgPath: '',
-            thumbnailPath: 'https://lorempixel.com/200/200/cats/?' + i,
-            description: {
-              captions: [
-                { text: '' }
-              ]
-            }
-          }
-        })
+    if (this.backendEnabled) {
+      setTimeout(function() {
         this.initialized = true
-      }
+      }.bind(this), 3000)
+    } else {
+      this.images = staticImages()
+      this.initialized = true
+    }
   }
 };
 </script>
