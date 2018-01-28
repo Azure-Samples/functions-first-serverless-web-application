@@ -1,7 +1,7 @@
 <template>
   <nav>
     <span class="about">About</span>
-    <button class="login" v-on:click="login">Log In</button>
+    <button class="login" @click="login">Log In</button>
   </nav>
 </template>
 

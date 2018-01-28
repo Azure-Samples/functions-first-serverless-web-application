@@ -5,7 +5,7 @@
       <div v-show="initialized">
         <app-navigation :auth="auth" />
         <app-masthead />
-        <app-photogrid />
+        <app-photogrid :images="images" />
       </div>
     </main>
   </section>
@@ -20,10 +20,13 @@ import AppLoader from '~/components/AppLoader.vue'
 export default {
   data() {
     const data = {
-      initialized: false
+      images: [],
+      initialized: false,
+      auth: {},
+      apiBaseUrl: ''
     }
     if (process.browser) {
-      data.auth ={
+      data.auth = {
         enabled: window.authEnabled,
         token: window.auth.token,
         loginUrl: window.auth.loginUrl
@@ -32,6 +35,11 @@ export default {
     }
     return data
   },
+  computed: {
+    backendEnabled() {
+      return !!this.apiBaseUrl
+    }
+  },
   components: {
     AppNavigation,
     AppMasthead,
@@ -39,9 +47,26 @@ export default {
     AppLoader
   },
   mounted() {
-    setTimeout(function() {
-      this.initialized = true
-    }.bind(this), 3000)
+      if (this.backendEnabled) {
+        setTimeout(function() {
+          this.initialized = true
+        }.bind(this), 3000)
+      } else {
+        // blanks
+        this.images = Array(10).fill().map((_, i) => {
+          return {
+            id: i + 1,
+            imgPath: '',
+            thumbnailPath: 'https://lorempixel.com/200/200/cats/?' + i,
+            description: {
+              captions: [
+                { text: '' }
+              ]
+            }
+          }
+        })
+        this.initialized = true
+      }
   }
 };
 </script>
