@@ -36,7 +36,11 @@ export default {
   methods: {
     captionon(e, image) {
       this.captionhover = true
-      this.captionText = image.id
+      if (image.description && image.description.captions && image.description.captions.length > 0) {
+        this.captionText = image.description.captions[0].text;
+      } else {
+        this.captionText = ''
+      }
       let x =
         e.target.getBoundingClientRect().left +
         e.target.getBoundingClientRect().width -

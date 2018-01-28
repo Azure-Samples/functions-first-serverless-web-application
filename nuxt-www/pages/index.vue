@@ -17,6 +17,7 @@ import AppMasthead from '~/components/AppMasthead.vue'
 import AppPhotogrid from '~/components/AppPhotogrid.vue'
 import AppLoader from '~/components/AppLoader.vue'
 import staticImages from '~/app/staticImages'
+import Api from '~/app/Api'
 
 export default {
   data() {
@@ -24,7 +25,9 @@ export default {
       images: [],
       initialized: false,
       auth: {},
-      apiBaseUrl: ''
+      apiBaseUrl: '',
+      blobBaseUrl: '',
+      api: {}
     }
     if (process.browser) {
       data.auth = {
@@ -33,6 +36,7 @@ export default {
         loginUrl: window.auth.loginUrl
       }
       data.apiBaseUrl = window.apiBaseUrl
+      data.blobBaseUrl = window.blobBaseUrl
     }
     return data
   },
@@ -49,9 +53,11 @@ export default {
   },
   mounted() {
     if (this.backendEnabled) {
-      setTimeout(function() {
+      this.api = new Api(this.apiBaseUrl, this.auth.token, this.blobBaseUrl)
+      this.api.getImages().then(images => {
+        this.images = images
         this.initialized = true
-      }.bind(this), 3000)
+      })
     } else {
       this.images = staticImages()
       this.initialized = true
