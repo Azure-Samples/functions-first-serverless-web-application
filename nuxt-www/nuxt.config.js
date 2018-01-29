@@ -37,6 +37,10 @@ module.exports = {
           exclude: /(node_modules)/
         })
       }
-    }
+    },
+    publicPath: '/nuxt/'
+  },
+  router: {
+    mode: 'hash'
   }
 }
