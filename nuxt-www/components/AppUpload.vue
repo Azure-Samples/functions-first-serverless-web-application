@@ -1,11 +1,19 @@
 <template>
   <div class="upload">
-    <form class="form-signin">
+    <form class="form-signin" @submit.prevent>
       <div class="fileinput">
-        <input type="file" id="upload-file" placeholder="Image URL" class="form-control" accept="image/*" />
+        <input 
+          type="file" 
+          id="upload-file" 
+          ref="uploadFile"
+          placeholder="Image URL" 
+          class="form-control" 
+          accept="image/*"
+          @change="fileChanged" />
       </div>
       <div class="formbutton">
-        <button id="upload-button">Upload!</button> 
+        <button id="upload-button" @click="uploadFile">Upload!</button>
+        <button id="cancel-button" @click="$emit('hide-upload')">Cancel</button>
       </div>
     </form>
   </div>
@@ -13,10 +21,28 @@
 
 <script>
 export default {
+  props: [ 'api' ],
   data() {
     return {
+      imgFile: null,
       imgURL: '',
       loading: false
+    }
+  },
+  methods: {
+    uploadFile() {
+      if (this.imgFile) {
+        this.$emit('file-uploading')
+        this.api.uploadImage(this.imgFile)
+          .then(function() {
+            this.$refs.uploadFile.value = null
+            this.$emit('file-upload-completed')
+          }.bind(this))
+      }
+    },
+    fileChanged(e) {
+      const files = e.target.files || e.dataTransfer.files
+      this.imgFile = files.length ? files[0] : null
     }
   }
 }
@@ -42,5 +68,11 @@ export default {
 .formbutton {
   float: right;
   margin-top: 30px;
+}
+
+#cancel-button {
+  background-color: #999;
+  color: #fff;
+  margin-left: 12px;
 }
 </style>

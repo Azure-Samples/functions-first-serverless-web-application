@@ -23,6 +23,11 @@ class Api {
         }
       })
   }
+
+  uploadImage(file) {
+    console.dir(file)
+    return new Promise(resolve => setTimeout(resolve, 4000))
+  }
 }
 
 export default Api

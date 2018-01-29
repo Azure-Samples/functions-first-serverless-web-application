@@ -1,16 +1,20 @@
 <template>
   <nav>
     <span class="about">About</span>
-    <button class="login" @click="login">Log In</button>
+    <button class="login" @click="login" v-show="auth.enabled">Log In</button>
+    <button class="display-upload" @click="displayUpload" v-show="!uploadEnabled">Upload a file</button>
   </nav>
 </template>
 
 <script>
 export default {
-  props: [ 'auth' ],
+  props: [ 'auth', 'uploadEnabled' ],
   methods: {
     login() {
       alert(this.auth.loginUrl)
+    },
+    displayUpload() {
+      this.$emit('display-upload')
     }
   }
 }
@@ -29,7 +33,7 @@ nav span {
   float: left;
 }
 
-.login {
+.login, .display-upload {
   float: right;
 }
 </style>

@@ -1,10 +1,21 @@
 <template>
   <section class="container">
     <main>
-      <app-loader v-show="!initialized" />
-      <div v-show="initialized">
-        <app-navigation :auth="auth" />
+      <app-loader id="initialization-loader" v-show="loading" :text="loaderText" />
+      <div v-show="!loading">
+        <app-navigation 
+          :auth="auth" 
+          :upload-enabled="uploadEnabled"
+          @display-upload="uploadEnabled = true"
+        />
         <app-masthead />
+        <app-upload 
+          v-show="uploadEnabled"
+          @hide-upload="uploadEnabled = false"
+          @file-uploading="onFileUploading"
+          @file-upload-completed="onFileUploadCompleted"
+          :api="api"
+        />
         <app-photogrid :images="images" />
       </div>
     </main>
@@ -16,6 +27,7 @@ import AppNavigation from '~/components/AppNavigation.vue'
 import AppMasthead from '~/components/AppMasthead.vue'
 import AppPhotogrid from '~/components/AppPhotogrid.vue'
 import AppLoader from '~/components/AppLoader.vue'
+import AppUpload from '~/components/AppUpload.vue'
 import staticImages from '~/app/staticImages'
 import Api from '~/app/Api'
 
@@ -27,7 +39,10 @@ export default {
       auth: {},
       apiBaseUrl: '',
       blobBaseUrl: '',
-      api: {}
+      api: {},
+      uploadEnabled: false,
+      fileUploading: false,
+      loaderText: 'Loading...'
     }
     if (process.browser) {
       data.auth = {
@@ -43,13 +58,27 @@ export default {
   computed: {
     backendEnabled() {
       return !!this.apiBaseUrl
+    },
+    loading() {
+      return !this.initialized || this.fileUploading
+    }
+  },
+  methods: {
+    onFileUploading() {
+      this.loaderText = "Uploading image..."
+      this.uploadEnabled = false
+      this.fileUploading = true
+    },
+    onFileUploadCompleted() {
+      this.fileUploading = false
     }
   },
   components: {
     AppNavigation,
     AppMasthead,
     AppPhotogrid,
-    AppLoader
+    AppLoader,
+    AppUpload
   },
   mounted() {
     if (this.backendEnabled) {
