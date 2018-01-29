@@ -3,7 +3,7 @@
 
   if (window.location.hash) {
     const match = window.location.hash.match(/token=([^&]+)/)
-    if (match[1]) {
+    if (match && match[1]) {
       authToken = JSON.parse(decodeURIComponent(match[1])).authenticationToken
       sessionStorage.setItem('authToken', authToken)
     }
