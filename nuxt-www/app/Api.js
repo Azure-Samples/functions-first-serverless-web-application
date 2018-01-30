@@ -25,11 +25,9 @@ class Api {
   }
 
   uploadImage(file) {
-    console.dir(file)
     return this._getUploadSasUri(file.name)
-      .then(sasUrl => {
-        return this._uploadBlob(sasUrl, file)
-      })
+      .then(sasUrl => this._uploadBlob(sasUrl, file))
+      .then(() => this._waitForFile(file.name))
   }
 
   _getUploadSasUri(filename) {
@@ -62,6 +60,21 @@ class Api {
     }
     return axios.put(sasUrl, file, config)
       .then(() => sasUrl)
+  }
+
+  _waitForFile(filename) {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        this.getImages()
+          .then(images => {
+            if (images.some(i => i.id === filename)) {
+              resolve(filename)
+            } else {
+              resolve(this._waitForFile(filename))
+            }
+          })
+      }, 500);
+    })
   }
 }
 

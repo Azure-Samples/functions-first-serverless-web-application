@@ -70,7 +70,11 @@ export default {
       this.fileUploading = true
     },
     onFileUploadCompleted() {
-      this.fileUploading = false
+      return this.api.getImages()
+        .then(images => {
+          this.images = images
+          this.fileUploading = false
+        })
     }
   },
   components: {

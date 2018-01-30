@@ -34,10 +34,10 @@ export default {
       if (this.imgFile) {
         this.$emit('file-uploading')
         this.api.uploadImage(this.imgFile)
-          .then(function() {
+          .then(() => {
             this.$refs.uploadFile.value = null
             this.$emit('file-upload-completed')
-          }.bind(this))
+          })
       }
     },
     fileChanged(e) {
