@@ -14,6 +14,7 @@
           @hide-upload="uploadEnabled = false"
           @file-uploading="onFileUploading"
           @file-upload-completed="onFileUploadCompleted"
+          @file-upload-progress-changed="onFileUploadProgress"
           :api="api"
         />
         <app-photogrid :images="images" />
@@ -65,7 +66,7 @@ export default {
   },
   methods: {
     onFileUploading() {
-      this.loaderText = "Uploading image..."
+      this.loaderText = ''
       this.uploadEnabled = false
       this.fileUploading = true
     },
@@ -75,6 +76,9 @@ export default {
           this.images = images
           this.fileUploading = false
         })
+    },
+    onFileUploadProgress(progressText) {
+      this.loaderText = progressText
     }
   },
   components: {

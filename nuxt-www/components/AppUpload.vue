@@ -31,9 +31,18 @@ export default {
   },
   methods: {
     uploadFile() {
+      const uploadProgress = uploadPercentage => {
+        if (uploadPercentage < 100) {
+          this.$emit('file-upload-progress-changed', `Uploading ${Math.round(uploadPercentage)}%...`)
+        } else {
+          this.$emit('file-upload-progress-changed', 'Analyzing image...')
+        }
+      }
+
       if (this.imgFile) {
         this.$emit('file-uploading')
-        this.api.uploadImage(this.imgFile)
+        uploadProgress(0)
+        this.api.uploadImage(this.imgFile, uploadProgress)
           .then(() => {
             this.$refs.uploadFile.value = null
             this.$emit('file-upload-completed')

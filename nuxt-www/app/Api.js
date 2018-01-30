@@ -24,9 +24,9 @@ class Api {
       })
   }
 
-  uploadImage(file) {
+  uploadImage(file, uploadProgressCallback) {
     return this._getUploadSasUri(file.name)
-      .then(sasUrl => this._uploadBlob(sasUrl, file))
+      .then(sasUrl => this._uploadBlob(sasUrl, file, uploadProgressCallback))
       .then(() => this._waitForFile(file.name))
   }
 
@@ -43,7 +43,7 @@ class Api {
       .then(response => response.data.url)
   }
 
-  _uploadBlob(sasUrl, file) {
+  _uploadBlob(sasUrl, file, uploadProgressCallback) {
     const config = {
       headers: {
         'X-ZUMO-AUTH': this.authToken,
@@ -54,7 +54,9 @@ class Api {
       },
       onUploadProgress(e) {
         if (e.lengthComputable) {
-          console.log(e.loaded / e.total)
+          uploadProgressCallback(e.loaded / e.total * 100)
+        } else {
+          uploadProgressCallback(0)
         }
       }
     }
