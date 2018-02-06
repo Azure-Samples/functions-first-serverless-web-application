@@ -1,3 +1,3 @@
-window.apiBaseUrl = 'https://firstserverlessweb.azurewebsites.net'
-window.blobBaseUrl = 'https://firstserverlessweb.blob.core.windows.net'
+window.apiBaseUrl = ''
+window.blobBaseUrl = ''
 window.authEnabled = false

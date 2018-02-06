@@ -38,7 +38,8 @@ module.exports = {
         })
       }
     },
-    publicPath: '/nuxt/'
+    publicPath: '/nuxt/',
+    subFolders: false
   },
   router: {
     mode: 'hash'

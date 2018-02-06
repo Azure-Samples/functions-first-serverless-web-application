@@ -49,7 +49,9 @@ export default {
       data.auth = {
         enabled: window.authEnabled,
         token: window.auth.token,
-        loginUrl: window.auth.loginUrl
+        loginUrl: window.auth.loginUrl,
+        logout: window.auth.logout,
+        username: null
       }
       data.apiBaseUrl = window.apiBaseUrl
       data.blobBaseUrl = window.blobBaseUrl
@@ -62,6 +64,9 @@ export default {
     },
     loading() {
       return !this.initialized || this.fileUploading
+    },
+    loggedIn() {
+      return this.auth.enabled && this.auth.token
     }
   },
   methods: {
@@ -89,7 +94,7 @@ export default {
     AppUpload
   },
   mounted() {
-    if (this.backendEnabled) {
+    if ((this.backendEnabled && !this.auth.enabled) || this.loggedIn) {
       this.api = new Api(this.apiBaseUrl, this.auth.token, this.blobBaseUrl)
       this.api.getImages().then(images => {
         this.images = images
@@ -99,8 +104,15 @@ export default {
       this.images = staticImages()
       this.initialized = true
     }
+
+    if (this.loggedIn) {
+      this.api.getUsername()
+        .then(username => {
+          this.auth.username = username
+        })
+    }
   }
-};
+}
 </script>
 
 <style>

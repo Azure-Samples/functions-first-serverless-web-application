@@ -1,17 +1,27 @@
 <template>
   <nav>
-    <span class="about">About</span>
-    <button class="login" @click="login" v-show="auth.enabled">Log In</button>
-    <button class="display-upload" @click="displayUpload" v-show="!uploadEnabled">Upload a file</button>
+    <span class="about" v-show="loggedIn">Welcome {{ auth.username }} [<a href="#" id="logout-link" @click="logout" role="button">Log out</a>]</span>
+    <button class="login" @click="login" v-show="auth.enabled && !loggedIn">Log In</button>
+    <button class="display-upload" @click="displayUpload" v-show="!uploadEnabled && (!auth.enabled || loggedIn)">Upload a file</button>
   </nav>
 </template>
 
 <script>
 export default {
   props: [ 'auth', 'uploadEnabled' ],
+  computed: {
+    loggedIn() {
+      return this.auth.enabled && this.auth.token // TODO: duplicate code
+    }
+  },
   methods: {
     login() {
-      alert(this.auth.loginUrl)
+      if (process.browser) {
+        window.location.href = this.auth.loginUrl
+      }
+    },
+    logout() {
+      return this.auth.logout()
     },
     displayUpload() {
       this.$emit('display-upload')
@@ -35,5 +45,9 @@ nav span {
 
 .login, .display-upload {
   float: right;
+}
+
+#logout-link {
+  color: white
 }
 </style>

@@ -6,9 +6,11 @@
     if (match && match[1]) {
       authToken = JSON.parse(decodeURIComponent(match[1])).authenticationToken
       sessionStorage.setItem('authToken', authToken)
+      history.pushState("", document.title, window.location.pathname + window.location.search)
     }
-    history.pushState("", document.title, window.location.pathname + window.location.search)
-  } else {
+  }
+  
+  if (!authToken) {
     authToken = sessionStorage.getItem('authToken')
   }
 
@@ -16,6 +18,10 @@
     token: authToken,
     loginUrl: window.apiBaseUrl +
       '/.auth/login/aad?session_mode=token&post_login_redirect_url=' +
-      encodeURIComponent(window.location.href)
+      encodeURIComponent(window.location.href),
+    logout: function() {
+      sessionStorage.removeItem('authToken')
+      window.location.reload()
+    }
   }
 }())

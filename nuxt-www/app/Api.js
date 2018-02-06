@@ -8,7 +8,12 @@ class Api {
   }
 
   getImages() {
-    return axios.get(`${this.baseUrl}/api/GetImages`)
+    const config = {
+      headers: {
+        'X-ZUMO-AUTH': this.authToken
+      }
+    }
+    return axios.get(`${this.baseUrl}/api/GetImages`, config)
       .then(response => {
         if (response.status === 200) {
           return response.data.map(i => {
@@ -30,6 +35,20 @@ class Api {
       .then(() => this._waitForFile(file.name))
   }
 
+  getUsername() {
+    const config = {
+      headers: {
+        'X-ZUMO-AUTH': this.authToken
+      }
+    }
+    return axios.get(`${this.baseUrl}/.auth/me`, config)
+      .then(response => {
+          const userDetails = response.data[0]
+          const userFirstName = userDetails.user_claims.find(function (i) { return i.typ === 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname' });
+          return userFirstName ? userFirstName.val : null
+        });
+  }
+
   _getUploadSasUri(filename) {
     const config = {
       headers: {
@@ -46,7 +65,6 @@ class Api {
   _uploadBlob(sasUrl, file, uploadProgressCallback) {
     const config = {
       headers: {
-        'X-ZUMO-AUTH': this.authToken,
         'Content-Type': 'application/octet-stream',
         'x-ms-version': '2017-04-17',
         'x-ms-blob-type': 'BlockBlob',
