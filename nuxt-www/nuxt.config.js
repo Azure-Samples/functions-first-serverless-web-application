@@ -13,8 +13,8 @@ module.exports = {
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ],
     script: [
-      { src: '/scripts/settings.js' },
-      { src: '/scripts/auth.js' }
+      { src: '/settings.js' },
+      { src: '/auth.js' }
     ]
   },
   /*
