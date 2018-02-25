@@ -100,7 +100,7 @@
         </g>
       </g>
     </svg>
-    <h1>Loading...</h1>
+    <h1>{{ text || 'Loading...' }}</h1>
   </div>
 </template>
 
@@ -108,6 +108,7 @@
 import { TweenMax, TimelineMax, Sine, Rough } from 'gsap'
 
 export default {
+  props: [ 'text' ],
   methods: {
     ship() {
       TweenMax.set(this.$refs.ship, {

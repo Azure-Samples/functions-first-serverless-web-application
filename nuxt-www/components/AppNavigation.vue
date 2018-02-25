@@ -1,12 +1,33 @@
 <template>
   <nav>
-    <span class="about">About</span>
-    <button class="login">Log In</button>
+    <span class="about" v-show="loggedIn">Welcome {{ auth.username }} [<a href="#" id="logout-link" @click="logout" role="button">Log out</a>]</span>
+    <button class="login" @click="login" v-show="auth.enabled && !loggedIn">Log In</button>
+    <button class="display-upload" @click="displayUpload" v-show="!uploadEnabled && (!auth.enabled || loggedIn)">Upload a file</button>
   </nav>
 </template>
 
 <script>
-export default {}
+export default {
+  props: [ 'auth', 'uploadEnabled' ],
+  computed: {
+    loggedIn() {
+      return this.auth.enabled && this.auth.token // TODO: duplicate code
+    }
+  },
+  methods: {
+    login() {
+      if (process.browser) {
+        window.location.href = this.auth.loginUrl
+      }
+    },
+    logout() {
+      return this.auth.logout()
+    },
+    displayUpload() {
+      this.$emit('display-upload')
+    }
+  }
+}
 </script>
 
 <style scoped>
@@ -22,7 +43,11 @@ nav span {
   float: left;
 }
 
-.login {
+.login, .display-upload {
   float: right;
+}
+
+#logout-link {
+  color: white
 }
 </style>

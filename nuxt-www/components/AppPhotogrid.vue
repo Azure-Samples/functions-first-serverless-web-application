@@ -5,17 +5,18 @@
       v-show="captionhover"
       :style="{ top: captionY + 'px', left: captionX + 'px' }"
     >
-      <p class="tooltip">This is a caption</p>
+      <p class="tooltip">{{ captionText }}</p>
     </div>
     <div class="gridwrap">
       <div 
-        v-for="n in 10"
-        :key="n"
-        @mouseenter="captionon" 
+        v-for="image in images"
+        :key="image.id"
+        @mouseenter="captionon($event, image)" 
         @mouseleave="captionoff" 
         class="panel"
         ref="hoverpanel"
       >
+      <img :src="image.thumbnailPath" width="180" height="180" />
       </div>
     </div>
   </section>
@@ -23,16 +24,23 @@
 
 <script>
 export default {
+  props: [ 'images' ],
   data() {
     return {
       captionhover: false,
       captionX: 0,
-      captionY: 0
+      captionY: 0,
+      captionText: ''
     }
   },
   methods: {
-    captionon(e) {
+    captionon(e, image) {
       this.captionhover = true
+      if (image.description && image.description.captions && image.description.captions.length > 0) {
+        this.captionText = image.description.captions[0].text;
+      } else {
+        this.captionText = ''
+      }
       let x =
         e.target.getBoundingClientRect().left +
         e.target.getBoundingClientRect().width -

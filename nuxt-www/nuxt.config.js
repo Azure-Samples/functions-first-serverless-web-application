@@ -11,6 +11,10 @@ module.exports = {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+    ],
+    script: [
+      { src: '/scripts/settings.js' },
+      { src: '/scripts/auth.js' }
     ]
   },
   /*
@@ -33,6 +37,11 @@ module.exports = {
           exclude: /(node_modules)/
         })
       }
-    }
+    },
+    publicPath: '/nuxt/',
+    subFolders: false
+  },
+  router: {
+    mode: 'hash'
   }
 }
