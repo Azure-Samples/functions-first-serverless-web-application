@@ -80,6 +80,9 @@ export default {
         .then(images => {
           this.images = images
           this.fileUploading = false
+        }).catch(() => {
+          this.images = staticImages()
+          this.fileUploading = false
         })
     },
     onFileUploadProgress(progressText) {
@@ -98,6 +101,9 @@ export default {
       this.api = new Api(this.apiBaseUrl, this.auth.token, this.blobBaseUrl)
       this.api.getImages().then(images => {
         this.images = images
+        this.initialized = true
+      }).catch(() => {
+        this.images = staticImages()
         this.initialized = true
       })
     } else {
