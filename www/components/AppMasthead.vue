@@ -11,5 +11,6 @@ export default {}
 <style scoped>
 .masthead {
   position: relative;
+  z-index: -1;
 }
 </style>
