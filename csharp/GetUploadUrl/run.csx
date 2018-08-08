@@ -5,17 +5,7 @@ using Microsoft.WindowsAzure.Storage.Blob;
 
 public static async Task<object> Run(HttpRequestMessage req, TraceWriter log)
 {
-    var filePrefix = "";
-
-    // var userId = req.Headers
-    //     .First(q => string.Compare(q.Key, "x-ms-client-principal-id", true) == 0)
-    //     .Value
-    //     .First();
-    // if (string.IsNullOrEmpty(userId)) throw new Exception("No userId");
-
-    // filePrefix = string.IsNullOrEmpty(userId) ? "" : $"{userId}-";
-
-    var filename = filePrefix + req.GetQueryNameValuePairs()
+    var filename = req.GetQueryNameValuePairs()
         .FirstOrDefault(q => string.Compare(q.Key, "filename", true) == 0)
         .Value;
 
@@ -25,7 +15,7 @@ public static async Task<object> Run(HttpRequestMessage req, TraceWriter log)
     var container = client.GetContainerReference("images");
     await container.CreateIfNotExistsAsync();
 
-    CloudBlockBlob blob = container.GetBlockBlobReference($"{filename}");
+    CloudBlockBlob blob = container.GetBlockBlobReference(filename);
 
     SharedAccessBlobPolicy adHocSAS = new SharedAccessBlobPolicy()
     {
