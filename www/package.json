@@ -15,7 +15,7 @@
   "dependencies": {
     "axios": "^0.17.1",
     "gsap": "^1.20.3",
-    "nuxt": "^1.0.0"
+    "nuxt": "^1.4.2"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.1",
