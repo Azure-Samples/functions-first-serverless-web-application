@@ -25,8 +25,11 @@ module.exports = function (context, req) {
 
     const sasToken = blobService.generateSharedAccessSignature(container, filename, sharedAccessPolicy);
 
-    context.res = {
-        url: blobService.getUrl(container, filename, sasToken)
+    context.res = { 
+        status: 200, body: 
+        {
+            url: blobService.getUrl(container, filename, sasToken)
+        }
     };
     context.done();
 };
