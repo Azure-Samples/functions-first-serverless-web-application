@@ -13,9 +13,9 @@
     "precommit": "npm run lint"
   },
   "dependencies": {
-    "axios": "^0.17.1",
-    "gsap": "^1.20.3",
-    "nuxt": "^1.4.2"
+    "axios": "^0.18.0",
+    "gsap": "^2.0.2",
+    "nuxt": "^2.2.0"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.1",
